@@ -12,23 +12,27 @@ If image tag and digest are not defined, termination fallbacks to chart appVersi
 {{- define "common.images.image" -}}
 {{- $registryName := default .imageRoot.registry ((.global).imageRegistry) -}}
 {{- $repositoryName := .imageRoot.repository -}}
-{{- $separator := ":" -}}
-{{- $termination := .imageRoot.tag | toString -}}
+{{- $image := "" }}
+
+{{- if $registryName -}}
+    {{- $image = print $registryName "/" -}}
+{{- end -}}
+
+{{- $image = print $image $repositoryName -}}
 
 {{- if not .imageRoot.tag }}
   {{- if .chart }}
-    {{- $termination = .chart.AppVersion | toString -}}
+    {{- $image = print $image ":" .chart.AppVersion | toString -}}
   {{- end -}}
-{{- end -}}
-{{- if .imageRoot.digest }}
-    {{- $separator = "@" -}}
-    {{- $termination = .imageRoot.digest | toString -}}
-{{- end -}}
-{{- if $registryName }}
-    {{- printf "%s/%s%s%s" $registryName $repositoryName $separator $termination -}}
 {{- else -}}
-    {{- printf "%s%s%s"  $repositoryName $separator $termination -}}
+    {{- $image = print $image ":" .imageRoot.tag | toString -}}
 {{- end -}}
+
+{{- if .imageRoot.digest }}
+    {{- $image = print $image "@" .imageRoot.digest | toString -}}
+{{- end -}}
+
+{{- printf $image -}}
 {{- end -}}
 
 {{/*
@@ -112,4 +116,3 @@ Return the proper image version (ingores image revision/prerelease info & fallba
     {{- print .chart.AppVersion -}}
 {{- end -}}
 {{- end -}}
-
