@@ -105,6 +105,7 @@ spec:
               # In order to not break the application functionality we need to make some
               # directories writable, so we need to copy it to an empty dir volume
               cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
+              cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/conf /emptydir/app-conf-dir
               cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/data /emptydir/app-data-dir
               cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
               cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/themes /emptydir/app-themes-dir
